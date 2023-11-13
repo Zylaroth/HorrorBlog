@@ -1,28 +1,65 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Horror Blog: Рецензии</title>
-  <link rel="stylesheet" href="../assets/css/main.css">
+  <link href="../assets/css/main.css" rel="stylesheet">
+  <link href="../assets/css/bulma.min.css" rel="stylesheet">
 </head>
+
 <body>
   <header>
-    <h1>Horror Blog: Рецензии</h1>
-    <h2>Рецензии, новости, обзоры, трейлеры</h2>
+    <nav class="level">
+      <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title is-3">
+            <strong class="has-text-weight-bold has-text-primary-light">Horror Blog</strong>
+          </h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="navbar-menu">
+          <p class="level-item has-text-weight-bold"><a class="button is-primary is-light">Фильмы</a></p>
+          <p class="level-item has-text-weight-bold"><a class="button is-primary is-light">Рецензии</a></p>
+          <p class="level-item"><a class="button is-success">Добавить</a></p>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="field has-addons">
+          <p class="control">
+            <input class="input" type="text" placeholder="Поиск рецензии">
+          </p>
+          <p class="control">
+            <button class="button is-success">Поиск</button>
+          </p>
+        </div>
+      </div>
+    </nav>
+    <div class="navbar-active">
+      <p class="level-item has-text-weight-bold"><a class="button is-primary is-light">Фильмы</a></p>
+      <p class="level-item has-text-weight-bold"><a class="button is-primary is-light">Рецензии</a></p>
+      <p class="level-item"><a class="button is-success">Добавить</a></p>
+    </div>
   </header>
   <main>
     <section class="main-image">
       <img src="horror.jpg" alt="кадр из фильма">
     </section>
-    <section class="text">
-      <h3>Добро пожаловать!</h3>
-      <p>Мы публикуем рецензии на новые фильмы.</p>
-      <ul>
-        <li><a href="reviews.html">Рецензии</a></li>
-        <li><a href="news.html">Новости</a></li>
-        <li><a href="reviews.html">Обзоры</a></li>
-        <li><a href="trailers.html">Трейлеры</a></li>
-      </ul>
+    <section class="text container">
+      <div class="box is-inline-block">
+        <h3>Добро пожаловать!</h3>
+        <p>Мы публикуем рецензии на новые фильмы.</p>
+      </div>
+      <div class="box is-inline-block">
+      </div>
+      </div>
     </section>
     <section class="additional-features">
       <h3>Дополнительные функции</h3>
@@ -33,4 +70,7 @@
     <p>Знакомиться с миром фильмов по отзывам!</p>
   </footer>
 </body>
+<script src="../assets/js/jquery-3.7.1.min.js"></script>
+<script src="../assets/js/main.js"></script>
+
 </html>
