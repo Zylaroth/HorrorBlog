@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Horror Blog: Рецензии</title>
   <link href="../assets/css/main.css" rel="stylesheet">
-  <link href="../assets/css/bulma.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/bulma.min.css">
+  <link rel="stylesheet" href="../assets/css/bulma-carousel.min.css">
 </head>
 
 <body>
@@ -53,13 +54,18 @@
       <img src="horror.jpg" alt="кадр из фильма">
     </section>
     <section class="text container">
-      <div class="box is-inline-block">
-        <h3>Добро пожаловать!</h3>
-        <p>Мы публикуем рецензии на новые фильмы.</p>
-      </div>
-      <div class="box is-inline-block">
-      </div>
-      </div>
+      <div class="columns">
+        <div class="column">
+          <figure class="box image is-cover">
+            <img src="https://www.krankenhaus.at/fileadmin/user_upload/Service_Lit/Foto/Neonatologie_Maler.jpg">
+          </figure>
+        </div>
+        <div class="column">
+          <div class="box">
+            <h3 class="has-text-weight-bold">Добро пожаловать!</h3>
+            <p id="typedText">Тут публикуются рецензии на новые фильмы.</p>
+          </div>
+        </div>
     </section>
     <section class="additional-features">
       <h3>Дополнительные функции</h3>
@@ -71,6 +77,7 @@
   </footer>
 </body>
 <script src="../assets/js/jquery-3.7.1.min.js"></script>
+<script src="../assets/js/bulma-carousel.min.js"></script>
 <script src="../assets/js/main.js"></script>
 
 </html>
