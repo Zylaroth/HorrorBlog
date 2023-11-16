@@ -12,6 +12,37 @@
 </head>
 
 <body>
+  <div class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Добавить рецензию</p>
+        <button class="modal-delete delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <!-- Название -->
+        <div class="field">
+          <label class="label">Название</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Введите название фильма">
+          </div>
+          <p class="help">Название фильма</p>
+        </div>
+        <!-- Текст -->
+        <div class="field">
+          <label class="label">Текст</label>
+          <div class="control">
+            <textarea class="textarea" placeholder="Введите текст отзыва"></textarea>
+          </div>
+          <p class="help">Текст отзыва</p>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success">Отправить</button>
+        <button class="modal-cancel button">Отмена</button>
+      </footer>
+    </div>
+  </div>
   <header>
     <nav class="level">
       <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
@@ -30,7 +61,7 @@
         <div class="navbar-menu">
           <p class="level-item has-text-weight-bold"><a class="button is-primary is-light">Фильмы</a></p>
           <p class="level-item has-text-weight-bold"><a class="button is-primary is-light">Рецензии</a></p>
-          <p class="level-item"><a class="button is-success">Добавить</a></p>
+          <p class="level-item"><a class="modal-active button is-success">Добавить</a></p>
         </div>
       </div>
       <div class="level-right">
@@ -54,15 +85,87 @@
     <section class="text container">
       <div class="columns">
         <div class="column">
-          <div class="box">
+          <div class="box is-relative has-background-transparent">
+            <h1 class="title mb-0">
+              <strong class="has-text-primary-light">Новинки</strong>
+            </h1>
+            <img id="prev-image">
+            <div id="carousel-container">
+              <div id="carousel">
+                <div class="carousel">
+                  <img src="../assets/images/alien.jpeg" alt="Image 1">
+                </div>
+                <div class="carousel"><img src="../assets/images/OHO.jpeg" alt="Image 2"></div>
+                <div class="carousel"><img src="../assets/images/alien.jpeg" alt="Image 3"></div>
+              </div>
+              <div id="prev">&#10094;</div>
+              <div id="next">&#10095;</div>
+            </div>
+            <img id="next-image" class="side-image">
           </div>
         </div>
         <div class="column">
-          <div class="box">
+          <div class="box has-background-white-ter">
             <h3 class="has-text-weight-bold">Добро пожаловать!</h3>
             <p id="typedText">Тут публикуются рецензии на новые фильмы.</p>
           </div>
         </div>
+    </section>
+    <section class="container">
+      <div class="table-container">
+        <table class="table has-background-white-ter is-hoverable is-fullwidth">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th><abbr title="еitle">Постер</abbr></th>
+              <th><abbr title="еitle">Название</abbr></th>
+              <th><abbr title="director">Режиссёр</abbr></th>
+              <th><abbr title="release_date">Дата</abbr></th>
+              <th><abbr title="rating">Рейтинг</abbr></th>
+              <th><abbr title="genre">Жанры</abbr></th>
+              <th><abbr title="actors">Актёры</abbr></th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>№</th>
+              <th><abbr title="еitle">Постер</abbr></th>
+              <th><abbr title="еitle">Название</abbr></th>
+              <th><abbr title="director">Режиссёр</abbr></th>
+              <th><abbr title="release_date">Дата</abbr></th>
+              <th><abbr title="rating">Рейтинг</abbr></th>
+              <th><abbr title="genre">Жанры</abbr></th>
+              <th><abbr title="actors">Актёры</abbr></th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr>
+              <th>1</th>
+              <th>
+                <figure class="image is-3by4"><img src="../assets/images/alien.jpeg"></figure>
+              </th>
+              <td><a href="">Test</a></td>
+              <td>Test</td>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th>2</th>
+              <th>
+                <figure class="image is-3by4"><img src="../assets/images/OHO.jpeg"></figure>
+              </th>
+              <td><a href="">Test</a></td>
+              <td>Test</td>
+              <td>2</td>
+              <td>2</td>
+              <td>2</td>
+              <td>2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
   <footer>
@@ -70,47 +173,56 @@
       <div class="slider">
         <div class="slide-track">
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/f/ff/2D_FILMS_LIGHT.png" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/f/ff/2D_FILMS_LIGHT.png"
+              alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/d/db/Albatros_Films_logo.png" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/d/db/Albatros_Films_logo.png"
+              alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/3/3b/Amblin_Entertainment_logo.png" alt=""/>
+            <img class="centered-image"
+              src="https://upload.wikimedia.org/wikipedia/ru/3/3b/Amblin_Entertainment_logo.png" alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/9/97/Cazzo_Film.gif" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/9/97/Cazzo_Film.gif" alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/5/5b/DreamWorks_Animation_SKG_logo.png" alt=""/>
+            <img class="centered-image"
+              src="https://upload.wikimedia.org/wikipedia/ru/5/5b/DreamWorks_Animation_SKG_logo.png" alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/b/b3/ImageMovers_logo.svg" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/b/b3/ImageMovers_logo.svg"
+              alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/2/21/Frost_Productions_Logo.jpg" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/2/21/Frost_Productions_Logo.jpg"
+              alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/6/6a/Hollywood_Pictures.jpg" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/6/6a/Hollywood_Pictures.jpg"
+              alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/a/a8/InlayFilm.png" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/a/a8/InlayFilm.png" alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/a/aa/Logo_amedia.gif" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/a/aa/Logo_amedia.gif" alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/1/16/Logo_EuropaCorp.JPG" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/1/16/Logo_EuropaCorp.JPG"
+              alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/e/e1/Motion_Picture_%26_General_Investment.jpg" alt=""/>
+            <img class="centered-image"
+              src="https://upload.wikimedia.org/wikipedia/ru/e/e1/Motion_Picture_%26_General_Investment.jpg" alt="" />
           </div>
           <div class="slide">
-            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/d/db/MutantEnemy.jpg" alt=""/>
+            <img class="centered-image" src="https://upload.wikimedia.org/wikipedia/ru/d/db/MutantEnemy.jpg" alt="" />
           </div>
         </div>
       </div>
-  </section>
+    </section>
     <p>Знакомся с миром фильмов по отзывам!</p>
   </footer>
 </body>

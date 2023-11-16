@@ -16,6 +16,10 @@ section {
     padding: 20px;
 }
 
+section:last-child {
+    padding-bottom: 150px;
+}
+
 .text {
     font-size: 1.25em;
 }
@@ -32,7 +36,7 @@ a {
 }
 
 .additional-features {
-    background-color: #4e4e4e;
+    background-color: rgb(79, 79, 79, 0.4);
     color: #000;
     padding: 10px;
 }
@@ -119,4 +123,89 @@ footer {
     transform: translate(-50%, -50%);
     max-width: 100%;
     max-height: 100%;
+}
+
+
+#carousel-container {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    width: 40%;
+    margin: 0 auto;
+}
+
+#carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel {
+    position: relative;
+    flex: 0 0 100%;
+    display: flex;
+    align-items: center;
+}
+
+.carousel img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#prev,
+#next,
+#prev-image,
+#next-image {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    border: none;
+    outline: none;
+}
+
+#prev-image,
+#next-image {
+    width: 30%;
+    opacity: 0.8;
+    transform: translateY(-35%);
+}
+
+#prev:hover,
+#next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#prev,
+#prev-image {
+    left: 0;
+}
+
+#next,
+#next-image {
+    right: 0;
+}
+
+/* .carousel-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+} */
+
+.has-background-transparent {
+    background-color: transparent !important;
+}
+
+.help {
+    color: #000 !important;
 }
