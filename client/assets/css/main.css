@@ -209,3 +209,18 @@ footer {
 .help {
     color: #000 !important;
 }
+
+.table th,
+.table td {
+    text-align: center;
+}
+
+.table th:first-child,
+.table td:first-child {
+    width: 5%;
+}
+
+.table th:not(:first-child),
+.table td:not(:first-child) {
+    width: 12.5%;
+}

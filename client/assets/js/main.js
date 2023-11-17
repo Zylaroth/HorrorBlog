@@ -1,10 +1,12 @@
 $(document).ready(function () {
-  // Включение бургера
+
+  // Бургер
   $(".navbar-burger").click(function () {
     $(".navbar-active").toggleClass("is-active");
     $(".navbar-burger").toggleClass("is-active");
   });
 
+  // Модальное окно
   $(".modal-active").click(function () {
     $(".modal").toggleClass("is-active");
   });
@@ -13,6 +15,7 @@ $(document).ready(function () {
     $(".modal").removeClass("is-active");
   });
 
+  // Карусель
   let currentCarousel = 0;
   const carousel = $('#carousel');
   const carouselItems = $('.carousel');
@@ -42,20 +45,65 @@ $(document).ready(function () {
 
   updateSideImages();
 
-  // Появление текста
-  var text = $("#typedText").text();
-  $("#typedText").text("");
-  var charCount = 0;
+  // Подтекст
+  const TypedText = (text, targetElementId) => {
+    var charCount = 0;
 
-  function typeText() {
-    var slice = text.slice(0, charCount++);
-    $("#typedText").text(slice);
+    function typeText() {
+      var slice = text.slice(0, charCount++);
+      $(`#${targetElementId}`).text(slice);
 
-    if (charCount <= text.length) {
-      setTimeout(typeText, 50);
+      if (charCount <= text.length) {
+        setTimeout(typeText, 50);
+      }
     }
-  }
 
-  typeText();
+    typeText();
+  };
+
+  // Обработка AJAX
+  const fetchData = async (url) => {
+    try {
+      const response = await fetch('http://localhost:3000' + url);
+      const data = await response.json();
+      var text = data.message;
+      return text
+
+    } catch (error) {
+      console.error('Ошибка:', error);
+    }
+  };
+
+  (async () => {
+    const textData = await fetchData('/api/index');
+    TypedText(textData, 'typedText');
+  })();
+
+  const populateTable = (moviesData) => {
+    const tableBody = document.querySelector('tbody');
+
+    moviesData.forEach((movie) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+      <td>${movie['Movie ID']}</td>
+      <td><figure class="image is-3by4"><img src="${movie['Image URL']}" alt="${movie.title}"></td></figure>
+      <td>${movie.Title}</td>
+      <td>${movie.Director}</td>
+      <td>${movie['Release Date']}</td>
+      <td>${movie.Rating}</td>
+      <td>${movie.Genre}</td>
+      <td>${movie.Actors}</td>
+        `;
+      tableBody.appendChild(row);
+    });
+  };
+
+  (async () => {
+    try {
+      const moviesData = await fetchData('/api/movies');
+      populateTable(moviesData);
+    } catch (error) {
+      console.error('Ошибка при получении данных:', error);
+    }
+  })();
 });
-
