@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Float, CheckConstraint, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Date, Float, CheckConstraint, ForeignKey, DateTime, desc, func
 from sqlalchemy.orm import relationship, Session
 from database import Base
 
@@ -36,20 +36,8 @@ class FindMovie:
         return db.query(Movie).all()
     
     @staticmethod
-    def get_movie_by_id(id: int, db: Session):
-        return db.query(Movie).filter(Movie.id == id).first()
-
-    @staticmethod
-    def get_movie_by_title(title: str, db: Session):
-        return db.query(Movie).filter(Movie.title == title).first()
-    
-    @staticmethod
-    def get_movies_with_images(db: Session):
-        return db.query(Movie, Image).join(Image).all()
-    
-    @staticmethod
-    def get_movie_with_image(title: str, db: Session):
-        return db.query(Movie, Image).join(Image).filter(Movie.title == title).first()
+    def get_movies_ordered_by_release_date(db: Session):
+        return db.query(Movie).order_by(desc(Movie.release_date)).all()
     
 class Review(Base):
     __tablename__ = "reviews"
@@ -61,6 +49,11 @@ class Review(Base):
     
     movie = relationship("Movie", back_populates="reviews")
 
+class FindReview:
+    @staticmethod
+    def get_movies_random_order(db: Session):
+        return db.query(Review).order_by(func.random()).first()
+    
 class Image(Base):
     __tablename__ = "images"
 

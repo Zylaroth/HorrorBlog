@@ -2,7 +2,8 @@ body {
     background-color: #333;
     color: #FFF !important;
     background-image: url(../images/background.jpg);
-    background-size: cover;
+    background-size: contain;
+    background-repeat: repeat;
     position: relative;
     min-height: 100vh;
 }
@@ -104,9 +105,9 @@ footer {
 }
 
 .slide-track {
-    animation: scroll 40s linear infinite;
+    animation: scroll 30s linear infinite;
     display: flex;
-    width: calc(250px * 14);
+    width: calc(250px * 10);
 }
 
 .slide {
@@ -208,6 +209,10 @@ footer {
 
 .help {
     color: #000 !important;
+}
+
+.table {
+    border-radius: 6px;
 }
 
 .table th,

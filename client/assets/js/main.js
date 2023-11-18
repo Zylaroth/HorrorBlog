@@ -76,11 +76,19 @@ $(document).ready(function () {
 
   (async () => {
     const textData = await fetchData('/api/index');
-    TypedText(textData, 'typedText');
+    const carousel = document.querySelector('#carousel');
+    TypedText(textData[0], 'typedText');
+    textData[1].forEach((url) => {
+      carousel.innerHTML = `
+      <div class="carousel">
+      <img src="${url}">
+      </div>
+    `
+    });
   })();
 
-  const populateTable = (moviesData) => {
-    const tableBody = document.querySelector('tbody');
+  const populateTableMovie = (moviesData) => {
+    const tableBody = document.querySelector('.movie');
 
     moviesData.forEach((movie) => {
       const row = document.createElement('tr');
@@ -98,10 +106,34 @@ $(document).ready(function () {
     });
   };
 
+  const populateTableReview = (review) => {
+    const reviewBody = document.querySelector('#review');
+    reviewBody.innerHTML = `
+      <div class="tile is-ancestor">
+      <div class="tile is-4 is-vertical is-parent">
+        <div class="tile is-child box has-background-white-ter">
+          <figure class="image is-3by4">
+          <img src="${review['Image URL']}">
+        </figure>
+        </div>
+        <div class="tile is-child box has-background-white-ter"><p class="subtitle">${review.date}</p></div>
+      </div>
+      <div class="tile is-parent">
+        <div class="tile is-child box has-background-white-ter">
+          <p class="title">${review.title}</p>
+          <p class="subtitle">${review.text}</p>
+        </div>
+      </div>
+      </div>
+        `;
+  };
+
   (async () => {
     try {
       const moviesData = await fetchData('/api/movies');
-      populateTable(moviesData);
+      const reviewsData = await fetchData('/api/reviews');
+      populateTableMovie(moviesData);
+      populateTableReview(reviewsData)
     } catch (error) {
       console.error('Ошибка при получении данных:', error);
     }

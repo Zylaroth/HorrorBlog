@@ -3,25 +3,28 @@ from starlette.status import HTTP_200_OK, HTTP_404_NOT_FOUND
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
-from models import Movie, FindMovie, Image
+from models import FindMovie, FindReview
 from database import db_dependency
 
 main = APIRouter(prefix='/api')
 # main.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 
-@main.get("/index")
-def get_data():
-    return {"message": "Тут публикуются рецензии на новые фильмы."}
+@main.get("/index", status_code=HTTP_200_OK)
+def get_data(db: db_dependency):
+    movies = FindMovie.get_movies_ordered_by_release_date(db)
+    movie_list = [i.images[0].url for i in movies]
+
+    return {"message": ["Тут публикуются рецензии на фильмы.", movie_list]}
 
 
 @main.get("/movies", status_code=HTTP_200_OK)
 async def get_movies(db: db_dependency):
-    movies_with_images = FindMovie.get_movies_with_images(db)
+    movies_with_images = FindMovie.get_movies(db)
 
     movie_list = []
 
-    for movie, image in movies_with_images:
+    for movie in movies_with_images:
         movie_dict = {
             "Movie ID": movie.id,
             "Title": movie.title,
@@ -29,13 +32,25 @@ async def get_movies(db: db_dependency):
             "Actors": movie.actors,
             "Release Date": str(movie.release_date),
             "Rating": movie.rating,
-            "Image URL": image.url
+            "Image URL": movie.images[0].url,
+            "Genre": [i.name for i in movie.genres]
         }
         movie_list.append(movie_dict)
-
+    
     return {"message": movie_list}
 
 
-@main.get("/movies/{id}", status_code=HTTP_200_OK)
-async def get_movie_by_id(id: int, db: db_dependency):
-    return FindMovie.get_movie_by_id(id, db)
+@main.get("/reviews", status_code=HTTP_200_OK)
+async def get_reviews(db: db_dependency):
+    review = FindReview.get_movies_random_order(db)
+    if review:
+        reviews_dict = {
+            "Review ID": review.id,
+            "Title": review.movie[0].title,
+            "Date": review.date,
+            "Text": review.text,
+            "Image URL": review.movie[0].images[0].url,
+        }
+        return {"message": reviews_dict}
+    else:
+        return {"message": "No reviews found."}
