@@ -44,12 +44,16 @@ class Review(Base):
 
     id = Column(Integer, primary_key=True)
     date = Column(DateTime, nullable=False)
-    text = Column(String(2550), nullable=False)
+    text = Column(String, nullable=False)
     movie_id = Column(Integer, ForeignKey("movies.id"))
     
     movie = relationship("Movie", back_populates="reviews")
 
 class FindReview:
+    @staticmethod
+    def get_reviews(db: Session):
+        return db.query(Review).all()
+
     @staticmethod
     def get_movies_random_order(db: Session):
         return db.query(Review).order_by(func.random()).first()

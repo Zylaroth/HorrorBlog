@@ -39,7 +39,7 @@ a {
 .additional-features {
     background-color: rgb(79, 79, 79, 0.4);
     color: #000;
-    padding: 10px;
+    padding: 10px 0 10px 0;
 }
 
 footer {
@@ -92,7 +92,7 @@ footer {
     }
 
     100% {
-        transform: translateX(calc(-250px * 7))
+        transform: translateX(calc(-250px * 9))
     }
 }
 
@@ -101,13 +101,12 @@ footer {
     margin: auto;
     overflow: hidden;
     position: relative;
-    width: 960px;
 }
 
 .slide-track {
-    animation: scroll 30s linear infinite;
+    animation: scroll 60s linear infinite;
     display: flex;
-    width: calc(250px * 10);
+    width: calc(250px * 14);
 }
 
 .slide {

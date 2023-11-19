@@ -2,8 +2,7 @@ $(document).ready(function () {
 
   // Бургер
   $(".navbar-burger").click(function () {
-    $(".navbar-active").toggleClass("is-active");
-    $(".navbar-burger").toggleClass("is-active");
+    $(".navbar-active, .navbar-burger").toggleClass("is-active");
   });
 
   // Модальное окно
@@ -16,34 +15,37 @@ $(document).ready(function () {
   });
 
   // Карусель
-  let currentCarousel = 0;
-  const carousel = $('#carousel');
-  const carouselItems = $('.carousel');
-  const prevImage = $('#prev-image');
-  const nextImage = $('#next-image');
+  const initCarousel = () => {
+    let currentCarousel = 0;
+    const carousel = $('#carousel');
+    const carouselItems = $('.carousel');
+    const prevImage = $('#prev-image');
+    const nextImage = $('#next-image');
 
-  function updateCarousel() {
-    const translateValue = -currentCarousel * 100 + '%';
-    carousel.css('transform', 'translateX(' + translateValue + ')');
-  }
+    function updateCarousel() {
+      const translateValue = -currentCarousel * 100 + '%';
+      carousel.css('transform', 'translateX(' + translateValue + ')');
+    }
 
-  function updateSideImages() {
-    const prevImageSrc = (currentCarousel - 1 + carouselItems.length) % carouselItems.length;
-    const nextImageSrc = (currentCarousel + 1) % carouselItems.length;
+    function updateSideImages() {
+      const prevImageSrc = (currentCarousel - 1 + carouselItems.length) % carouselItems.length;
+      const nextImageSrc = (currentCarousel + 1) % carouselItems.length;
 
-    prevImage.attr('src', carouselItems.eq(prevImageSrc).find('img').attr('src'));
-    nextImage.attr('src', carouselItems.eq(nextImageSrc).find('img').attr('src'));
-  }
+      prevImage.attr('src', carouselItems.eq(prevImageSrc).find('img').attr('src'));
+      nextImage.attr('src', carouselItems.eq(nextImageSrc).find('img').attr('src'));
+    }
 
-  function handleClick() {
-    $(this).attr('id') === 'prev' ? currentCarousel = (currentCarousel - 1 + carouselItems.length) % carouselItems.length : currentCarousel = (currentCarousel + 1) % carouselItems.length;
-    updateCarousel();
+    function handleClick() {
+      $(this).attr('id') === 'prev' ? currentCarousel = (currentCarousel - 1 + carouselItems.length) % carouselItems.length : currentCarousel = (currentCarousel + 1) % carouselItems.length;
+      updateCarousel();
+      updateSideImages();
+    }
+
+    $('#prev, #next, #prev-image, #next-image').on('click', handleClick);
+
     updateSideImages();
-  }
+  };
 
-  $('#prev, #next, #prev-image, #next-image').on('click', handleClick);
-
-  updateSideImages();
 
   // Подтекст
   const TypedText = (text, targetElementId) => {
@@ -74,19 +76,6 @@ $(document).ready(function () {
     }
   };
 
-  (async () => {
-    const textData = await fetchData('/api/index');
-    const carousel = document.querySelector('#carousel');
-    TypedText(textData[0], 'typedText');
-    textData[1].forEach((url) => {
-      carousel.innerHTML = `
-      <div class="carousel">
-      <img src="${url}">
-      </div>
-    `
-    });
-  })();
-
   const populateTableMovie = (moviesData) => {
     const tableBody = document.querySelector('.movie');
 
@@ -108,34 +97,91 @@ $(document).ready(function () {
 
   const populateTableReview = (review) => {
     const reviewBody = document.querySelector('#review');
-    reviewBody.innerHTML = `
-      <div class="tile is-ancestor">
-      <div class="tile is-4 is-vertical is-parent">
-        <div class="tile is-child box has-background-white-ter">
-          <figure class="image is-3by4">
-          <img src="${review['Image URL']}">
-        </figure>
-        </div>
-        <div class="tile is-child box has-background-white-ter"><p class="subtitle">${review.date}</p></div>
-      </div>
-      <div class="tile is-parent">
-        <div class="tile is-child box has-background-white-ter">
-          <p class="title">${review.title}</p>
-          <p class="subtitle">${review.text}</p>
-        </div>
-      </div>
-      </div>
-        `;
-  };
+    const newDiv = document.createElement('div');
+    newDiv.classList.add('tile', 'is-ancestor');
 
-  (async () => {
+    newDiv.innerHTML = `
+    <div class="tile is-4 is-vertical is-parent">
+    <div class="tile is-child box has-background-white-ter">
+      <figure class="image is-3by4">
+        <img src="${review['Image URL']}">
+      </figure>
+    </div>
+    <div class="tile is-child box has-background-white-ter"><p class="subtitle">${review.Date}</p></div>
+    </div>
+    <div class="tile is-parent">
+    <div class="tile is-child box has-background-white-ter">
+      <p class="title">${review.Title}</p>
+      <p class="subtitle">${review.Text}</p>
+    </div>
+    </div>
+    `;
+    reviewBody.appendChild(newDiv);
+  }
+
+  const handleDataFetch = async () => {
     try {
+      const textData = await fetchData('/api/index');
+      const carousel = document.querySelector('#carousel');
+      TypedText(textData[0], 'typedText');
+
+      textData[1].forEach((url) => {
+        const newDiv = document.createElement('div');
+        newDiv.classList.add('carousel');
+        newDiv.innerHTML = `<img src="${url}">`;
+        carousel.appendChild(newDiv);
+
+        initCarousel();
+      });
+
       const moviesData = await fetchData('/api/movies');
-      const reviewsData = await fetchData('/api/reviews');
+      const reviewData = await fetchData('/api/review');
       populateTableMovie(moviesData);
-      populateTableReview(reviewsData)
+      populateTableReview(reviewData[0]);
+
+      const movieSelect = document.getElementById('movieSelect');
+      movieSelect.innerHTML = '';
+
+      moviesData.forEach((movie) => {
+        const option = document.createElement('option');
+        option.value = movie["Movie ID"];
+        option.textContent = movie.Title;
+        movieSelect.appendChild(option);
+      })
     } catch (error) {
       console.error('Ошибка при получении данных:', error);
     }
+  };
+
+  (async () => {
+    await handleDataFetch();
   })();
+
+  $("#send-review").click(async function () {
+    const movieId = $("#movieSelect").val();
+    const text = $("#review-text").val();
+    $(".modal").removeClass("is-active");
+  
+    try {
+      const response = await fetch('http://localhost:3000/api/create/review', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          movie_id: parseInt(movieId),
+          text: text,
+        }),
+      });
+  
+      if (response.ok) {
+        console.log('Рецензия успешно добавлена');
+      } else {
+        const errorMessage = await response.text();
+        console.error('Ошибка при добавлении рецензии:', errorMessage);
+      }
+    } catch (error) {
+      console.error('Ошибка:', error);
+    }
+  });
 });

@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
   <link href="../assets/css/main.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
 </head>
 
 <body>
@@ -23,20 +22,24 @@
         <div class="field">
           <label class="label">Название</label>
           <div class="control">
-            <input class="input" type="text" placeholder="Введите название фильма">
+            <div class="select">
+              <select id="movieSelect">
+                  <option value="0">Не загружено</option>
+              </select>
+            </div>
           </div>
           <p class="help">Название фильма</p>
         </div>
         <div class="field">
           <label class="label">Текст</label>
           <div class="control">
-            <textarea class="textarea" placeholder="Введите текст отзыва"></textarea>
+            <textarea class="textarea" id="review-text" placeholder="Введите текст отзыва"></textarea>
           </div>
           <p class="help">Текст отзыва</p>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success">Отправить</button>
+        <button class="button is-success" id="send-review">Отправить</button>
         <button class="modal-cancel button">Отмена</button>
       </footer>
     </div>
@@ -51,7 +54,7 @@
       <div class="level-left">
         <div class="level-item">
           <h1 class="title is-3">
-            <strong class="nosifer has-text-primary-light">Horror Blog</strong>
+            <a href=""><strong class="nosifer has-text-primary-light">Horror Blog</strong></a>
           </h1>
         </div>
       </div>
@@ -192,7 +195,6 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
 <script src="../assets/js/main.js"></script>
 
 </html>
