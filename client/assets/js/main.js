@@ -84,7 +84,7 @@ $(document).ready(function () {
       row.innerHTML = `
       <td>${movie['Movie ID']}</td>
       <td><figure class="image is-3by4"><img src="${movie['Image URL']}" alt="${movie.title}"></td></figure>
-      <td>${movie.Title}</td>
+      <td class="has-text-weight-bold">${movie.Title}</td>
       <td>${movie.Director}</td>
       <td>${movie['Release Date']}</td>
       <td>${movie.Rating}</td>
@@ -143,10 +143,12 @@ $(document).ready(function () {
       movieSelect.innerHTML = '';
 
       moviesData.forEach((movie) => {
-        const option = document.createElement('option');
-        option.value = movie["Movie ID"];
-        option.textContent = movie.Title;
-        movieSelect.appendChild(option);
+        if (!movie.is_reviewed) {
+          const option = document.createElement('option');
+          option.value = movie["Movie ID"];
+          option.textContent = movie.Title;
+          movieSelect.appendChild(option);
+        }
       })
     } catch (error) {
       console.error('Ошибка при получении данных:', error);
@@ -161,7 +163,7 @@ $(document).ready(function () {
     const movieId = $("#movieSelect").val();
     const text = $("#review-text").val();
     $(".modal").removeClass("is-active");
-  
+
     try {
       const response = await fetch('http://localhost:3000/api/create/review', {
         method: 'POST',
@@ -173,7 +175,7 @@ $(document).ready(function () {
           text: text,
         }),
       });
-  
+
       if (response.ok) {
         console.log('Рецензия успешно добавлена');
       } else {

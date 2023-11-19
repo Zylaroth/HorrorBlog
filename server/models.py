@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Float, CheckConstraint, ForeignKey, DateTime, desc, func
+from sqlalchemy import Column, Integer, String, Date, Float, CheckConstraint, ForeignKey, DateTime, desc, func, UniqueConstraint
 from sqlalchemy.orm import relationship, Session
 from database import Base
 
@@ -48,6 +48,8 @@ class Review(Base):
     movie_id = Column(Integer, ForeignKey("movies.id"))
     
     movie = relationship("Movie", back_populates="reviews")
+    
+    __table_args__ = (UniqueConstraint('movie_id'),)
 
 class FindReview:
     @staticmethod

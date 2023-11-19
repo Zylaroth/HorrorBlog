@@ -24,6 +24,7 @@ async def get_movies(db: db_dependency):
     movie_list = []
 
     for movie in movies_with_images:
+        is_reviewed = bool(movie.reviews) and bool(movie.reviews[0])
         movie_dict = {
             "Movie ID": movie.id,
             "Title": movie.title,
@@ -32,7 +33,8 @@ async def get_movies(db: db_dependency):
             "Release Date": str(movie.release_date),
             "Rating": movie.rating,
             "Image URL": movie.images[0].url,
-            "Genre": [i.name for i in movie.genres]
+            "Genre": [i.name for i in movie.genres],
+            "is_reviewed": is_reviewed
         }
         movie_list.append(movie_dict)
     
