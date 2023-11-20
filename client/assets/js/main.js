@@ -135,7 +135,7 @@ $(document).ready(function () {
     <div class="tile is-parent">
     <div class="tile is-child box has-background-white-ter">
       <p class="title">${review.Title}</p>
-      <p class="subtitle">${review.Text}</p>
+      <p class="subtitle text">${review.Text}</p>
     </div>
     </div>
     `;
@@ -244,7 +244,10 @@ $(document).ready(function () {
           actors: actors,
           release_date: releaseDate,
           rating: parseFloat(rating),
-          genres: genres.split(',').map(genre => genre.trim()),
+          genres: genres.split(',').map(genre => {
+            const trimmedGenre = genre.trim();
+            return trimmedGenre.charAt(0).toUpperCase() + trimmedGenre.slice(1).toLowerCase();
+          }),
           url: url,
         }),
       });

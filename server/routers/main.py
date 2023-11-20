@@ -44,7 +44,7 @@ async def get_movies(db: db_dependency):
 
 @main.get("/review", status_code=HTTP_200_OK)
 async def get_review(db: db_dependency):
-    review = FindReview.get_movies_random_order(db)
+    review = FindReview.get_review_random_order(db)
     formatted_time = review.date.strftime("%H:%M:%S %d.%m.%Y")
     if review:
         reviews_dict = [{
@@ -118,3 +118,19 @@ async def create_movie(data: MovieCreate, db: db_dependency):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+@main.get("/review/{id}", status_code=HTTP_200_OK)
+async def get_review_by_id(id: int, db: db_dependency):
+    review = FindReview.get_review_by_id(id, db)
+    formatted_time = review.date.strftime("%H:%M:%S %d.%m.%Y")
+    if review:
+        reviews_dict = [{
+            "Review ID": review.id,
+            "Title": review.movie.title,
+            "Date": formatted_time,
+            "Text": review.text,
+            "Image URL": review.movie.images[0].url,
+        }]
+        return {"message": reviews_dict}
+    else:
+        return {"message": "No reviews found."}

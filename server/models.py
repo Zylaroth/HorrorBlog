@@ -62,8 +62,12 @@ class FindReview:
         return db.query(Review).all()
 
     @staticmethod
-    def get_movies_random_order(db: Session):
+    def get_review_random_order(db: Session):
         return db.query(Review).order_by(func.random()).first()
+
+    @staticmethod
+    def get_review_by_id(id: int, db: Session):
+        return db.query(Review).filter(Review.movie_id == id).first()
     
 class Image(Base):
     __tablename__ = "images"
