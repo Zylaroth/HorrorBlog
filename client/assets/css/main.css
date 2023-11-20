@@ -228,3 +228,38 @@ footer {
 .table td:not(:first-child) {
     width: 12.5%;
 }
+
+.modal-card-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-title-container {
+    display: flex;
+    align-items: center;
+}
+
+.modal-delete {
+    margin-left: auto;
+}
+
+.modal-card-title {
+    margin-right: 1rem;
+}
+
+td {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#titleCell{
+    cursor: pointer;
+}
+
+#titleCell:hover{
+    background-color: rgba(0, 1, 0, 0.05);
+}

@@ -16,6 +16,11 @@ class Genre(Base):
 
     movies = relationship("Movie", secondary="movie_genres", back_populates="genres")
 
+class FindGenre:
+    @staticmethod
+    def get_genre_by_name(name: str, db: Session):
+        return  db.query(Genre).filter(Genre.name == name).first()
+
 class Movie(Base):
     __tablename__ = "movies"
 

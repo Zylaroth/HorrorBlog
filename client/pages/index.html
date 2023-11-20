@@ -15,33 +15,102 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Добавить рецензию</p>
+        <div class="modal-title-container">
+          <p class="modal-card-title">Добавить</p>
+          <div class="select">
+            <select id="modalTypeSelect">
+              <option value="review">рецензию</option>
+              <option value="movie">фильм</option>
+            </select>
+          </div>
+        </div>
         <button class="modal-delete delete" aria-label="close"></button>
       </header>
       <section class="modal-card-body">
-        <div class="field">
-          <label class="label">Название</label>
-          <div class="control">
-            <div class="select">
-              <select id="movieSelect">
+        <div id="reviewFieldsContainer">
+          <div class="field">
+            <label class="label">Название</label>
+            <div class="control">
+              <div class="select">
+                <select id="movieSelect">
                   <option value="0">Не загружено</option>
-              </select>
+                </select>
+              </div>
             </div>
+            <p class="help">Название фильма</p>
           </div>
-          <p class="help">Название фильма</p>
-        </div>
-        <div class="field">
-          <label class="label">Текст</label>
-          <div class="control">
-            <textarea class="textarea" id="review-text" placeholder="Введите текст отзыва"></textarea>
+          <div class="field">
+            <label class="label">Текст</label>
+            <div class="control">
+              <textarea class="textarea" id="review-text" placeholder="Введите текст отзыва"></textarea>
+            </div>
+            <p class="help">Текст отзыва</p>
           </div>
-          <p class="help">Текст отзыва</p>
+          <footer class="modal-card-foot has-background-transparent">
+            <button class="button is-success" id="send-review">Отправить</button>
+            <button class="modal-cancel button">Отмена</button>
+          </footer>
         </div>
+
+        <div id="movieFieldsContainer" style="display: none;">
+          <div class="field">
+            <label class="label">Название</label>
+            <div class="control">
+                <input class="input" type="text" id="movie"
+                placeholder="Введите название фильма" />
+            </div>
+            <p class="help">Название фильма</p>
+          </div>
+          <div class="field">
+            <label class="label">Режиссёр</label>
+            <div class="control">
+              <textarea class="textarea" id="director" placeholder="Введите ФИО режиссера"></textarea>
+            </div>
+            <p class="help">ФИО режиссёра</p>
+          </div>
+          <div class="field">
+            <label class="label">Актёры</label>
+            <div class="control">
+              <textarea class="textarea" id="actors" placeholder="Введите ФИО актёров"></textarea>
+            </div>
+            <p class="help">ФИО актёров</p>
+          </div>
+          <div class="field">
+            <label class="label">Рейтинг</label>
+            <div class="control">
+              <input class="input" type="number" step="0.1" min="1" max="10" id="rating"
+                placeholder="Введите рейтинг" />
+            </div>
+            <p class="help">Рейтинг фильма</p>
+          </div>
+          <div class="field">
+            <label class="label">Дата релиза</label>
+            <div class="control">
+              <input class="input" type="date" id="releaseDate" />
+            </div>
+            <p class="help">Премьера (МИР)</p>
+          </div>
+          <div class="field">
+            <label class="label">Жанры</label>
+            <div class="control">
+              <input class="input" type="text" id="genres" placeholder="Введите жанры через запятую" />
+            </div>
+            <p class="help">Жанры фильма (разделители - запятые)</p>
+          </div>
+          <div class="field">
+            <label class="label">Ссылка на изображение</label>
+            <div class="control">
+              <input class="input" type="text" id="url" placeholder="Введите ссылку" />
+            </div>
+            <p class="help">Постер</p>
+          </div>
+          <footer class="modal-card-foot has-background-transparent">
+            <button class="button is-success" id="send-movie">Отправить</button>
+            <button class="modal-cancel button">Отмена</button>
+          </footer>
+        </div>
+
       </section>
-      <footer class="modal-card-foot">
-        <button class="button is-success" id="send-review">Отправить</button>
-        <button class="modal-cancel button">Отмена</button>
-      </footer>
     </div>
   </div>
   <header>
@@ -131,7 +200,7 @@
     </section>
     <section class="container" id="review">
       <h1 class="title mb-0">
-        <strong class="has-text-primary-light">Рецензия</strong>
+        <strong class="has-text-primary-light">Случайная рецензия</strong>
       </h1>
     </section>
   </main>
