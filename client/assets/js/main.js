@@ -10,7 +10,7 @@ $(document).ready(function () {
     $(".modal").toggleClass("is-active");
   });
 
-  $(".modal-delete, .modal-cancel").click(function () {
+  $(".modal-delete, .modal-cancel, .modal-close").click(function () {
     $(".modal").removeClass("is-active");
   });
 
@@ -36,7 +36,7 @@ $(document).ready(function () {
     }
 
     function handleClick() {
-      $(this).attr('id') === 'prev' ? currentCarousel = (currentCarousel - 1 + carouselItems.length) % carouselItems.length : currentCarousel = (currentCarousel + 1) % carouselItems.length;
+      $(this).attr('id') === 'prev' || $(this).attr('id') === 'prev-image' ? currentCarousel = (currentCarousel - 1 + carouselItems.length) % carouselItems.length : currentCarousel = (currentCarousel + 1) % carouselItems.length;
       updateCarousel();
       updateSideImages();
     }
@@ -77,21 +77,44 @@ $(document).ready(function () {
   };
 
   const populateTableMovie = (moviesData) => {
-    const tableBody = document.querySelector('.movie');
+    const tableBody = $('.movie');
 
     moviesData.forEach((movie) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-      <td>${movie['Movie ID']}</td>
-      <td><figure class="image is-3by4"><img src="${movie['Image URL']}" alt="${movie.title}"></td></figure>
-      <td id="titleCell" class="has-text-weight-bold"><span>${movie.Title}</span></td>
-      <td id="titleCell"><span>${movie.Director}</span></td>
-      <td id="titleCell"><span>${movie['Release Date']}</span></td>
-      <td id="titleCell"><span>${movie.Rating}</span></td>
-      <td id="titleCell"><span>${movie.Genre}</span></td>
-      <td id="titleCell"><span>${movie.Actors}</span></td>
-        `;
-      tableBody.appendChild(row);
+      const row = $('<tr>');
+      row.html(`
+        <td id="${movie['Movie ID']}">${movie['Movie ID']}</td>
+        <td><figure class="image is-3by4"><img src="${movie['Image URL']}" alt="${movie.title}"></figure></td>
+        <td id="titleCell" class="has-text-weight-bold link"><span>${movie.Title}</span></td>
+        <td id="titleCell"><span>${movie.Director}</span></td>
+        <td id="titleCell"><span>${movie['Release Date']}</span></td>
+        <td id="titleCell"><span>${movie.Rating}</span></td>
+        <td id="titleCell"><span>${movie.Genre}</span></td>
+        <td id="titleCell" class="text-small"><span>${movie.Actors}</span></td>
+      `);
+      
+      row.find('.link').click(async function () {
+        const movieId = movie['Movie ID'];
+      
+        try {
+          const review = await fetchData(`/api/review/${movieId}`);
+          console.log(review)
+          if (review) {
+            $("#review-image-url").attr("src", review[0]['Image URL']);
+            $("#review-title").text(review[0].Title);
+            $("#review-text").text(review[0].Text);
+            $("#review-date").text(review[0].Date);
+      
+            $("#reviewModal").addClass("is-active");
+          } else {
+            console.error('Review data is empty or not available.');
+          }
+        } catch (error) {
+          console.error('Error fetching review data:', error);
+        }
+      });
+
+      tableBody.append(row);
+
     });
     $('[id="titleCell"]').each(function () {
       const $this = $(this);
@@ -100,12 +123,12 @@ $(document).ready(function () {
       $this.text(truncatedText);
       $this.data('original-text', originalText);
     });
-    
+
     $('[id="titleCell"]').click(function () {
       const $this = $(this);
       const originalText = $this.data('original-text') || $this.text();
       const isTruncated = $this.data('is-truncated') || false;
-    
+
       if (!isTruncated) {
         $this.text(originalText);
         $this.data('is-truncated', true);
@@ -131,6 +154,13 @@ $(document).ready(function () {
       </figure>
     </div>
     <div class="tile is-child box has-background-white-ter"><p class="subtitle"><strong>Время публикации: </strong>${review.Date}</p></div>
+    <div class="tile is-child has-background-transparent"></div>
+    <div class="tile is-child has-background-transparent"></div>
+    <div class="tile is-child has-background-transparent"></div>
+    <div class="tile is-child has-background-transparent"></div>
+    <div class="tile is-child has-background-transparent"></div>
+    <div class="tile is-child has-background-transparent"></div>
+    <div class="tile is-child has-background-transparent"></div>
     </div>
     <div class="tile is-parent">
     <div class="tile is-child box has-background-white-ter">
@@ -169,10 +199,10 @@ $(document).ready(function () {
       const carousel = document.querySelector('#carousel');
       TypedText(textData[0], 'typedText');
 
-      textData[1].forEach((url) => {
+      textData[1].forEach((data) => {
         const newDiv = document.createElement('div');
         newDiv.classList.add('carousel');
-        newDiv.innerHTML = `<img src="${url}">`;
+        newDiv.innerHTML = `<a href="#${data.id}"><img src="${data.image_url}"></a>`;
         carousel.appendChild(newDiv);
 
         initCarousel();
@@ -195,7 +225,7 @@ $(document).ready(function () {
 
   $("#send-review").click(async function () {
     const movieId = $("#movieSelect").val();
-    const text = $("#review-text").val();
+    const text = $("#review_text").val();
     $(".modal").removeClass("is-active");
     try {
       const response = await fetch('http://localhost:3000/api/create/review', {
@@ -213,12 +243,15 @@ $(document).ready(function () {
         console.log('Рецензия успешно добавлена');
         const updatedMoviesData = await fetchData('/api/movies');
         populateMovieSelect(updatedMoviesData);
+        alert('Рецензия успешно добавлена')
       } else {
         const errorMessage = await response.text();
         console.error('Ошибка при добавлении рецензии:', errorMessage);
+        alert('Ошибка при добавлении рецензии:', errorMessage)
       }
     } catch (error) {
       console.error('Ошибка:', error);
+      alert('Ошибка:', error)
     }
   });
 
@@ -231,7 +264,12 @@ $(document).ready(function () {
     const genres = $("#genres").val();
     const url = $("#url").val();
     $(".modal").removeClass("is-active");
-  
+
+    function isValidImageUrl(url) {
+      var imageRegex = /\.(jpeg|jpg|gif|png|bmp)$/;
+      return imageRegex.test(url);
+    }
+
     try {
       const response = await fetch('http://localhost:3000/api/create/movie', {
         method: 'POST',
@@ -248,20 +286,23 @@ $(document).ready(function () {
             const trimmedGenre = genre.trim();
             return trimmedGenre.charAt(0).toUpperCase() + trimmedGenre.slice(1).toLowerCase();
           }),
-          url: url,
+          url: isValidImageUrl(url) ? url : null,
         }),
       });
-  
+
       if (response.ok) {
         console.log('Фильм успешно добавлен');
         const updatedMoviesData = await fetchData('/api/movies');
         populateMovieSelect(updatedMoviesData);
+        alert('Фильм успешно добавлен')
       } else {
         const errorMessage = await response.text();
         console.error('Ошибка при добавлении фильма:', errorMessage);
+        alert('Ошибка при добавлении фильма:', errorMessage)
       }
     } catch (error) {
       console.error('Ошибка:', error);
+      alert('Ошибка:', error)
     }
   });
 

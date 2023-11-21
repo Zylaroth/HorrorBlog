@@ -12,8 +12,7 @@ main = APIRouter(prefix='/api')
 @main.get("/index", status_code=HTTP_200_OK)
 def get_data(db: db_dependency):
     movies = FindMovie.get_movies_ordered_by_release_date(db)
-    movie_list = [i.images[0].url for i in movies if bool(i.images) and bool(i.images[0].url)]
-
+    movie_list = [{"id": i.id, "image_url": i.images[0].url} for i in movies if bool(i.images) and bool(i.images[0].url)]
     return {"message": ["Тут публикуются рецензии на фильмы.", movie_list]}
 
 
@@ -122,15 +121,19 @@ async def create_movie(data: MovieCreate, db: db_dependency):
 @main.get("/review/{id}", status_code=HTTP_200_OK)
 async def get_review_by_id(id: int, db: db_dependency):
     review = FindReview.get_review_by_id(id, db)
-    formatted_time = review.date.strftime("%H:%M:%S %d.%m.%Y")
-    if review:
-        reviews_dict = [{
+    if bool(review) and bool(review.id):
+        return {"message": [{
             "Review ID": review.id,
             "Title": review.movie.title,
-            "Date": formatted_time,
+            "Date": review.date.strftime("%H:%M:%S %d.%m.%Y"),
             "Text": review.text,
             "Image URL": review.movie.images[0].url,
-        }]
-        return {"message": reviews_dict}
+        }]}
     else:
-        return {"message": "No reviews found."}
+        return {"message": [{
+            "Review ID": "Не найдено.",
+            "Title": "Не найдено.",
+            "Date": "Не найдено.",
+            "Text": "Не найдено.",
+            "Image URL": "Не найдено.",
+        }]}
