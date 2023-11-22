@@ -91,10 +91,10 @@ $(document).ready(function () {
         <td id="titleCell"><span>${movie.Genre}</span></td>
         <td id="titleCell" class="text-small"><span>${movie.Actors}</span></td>
       `);
-      
+
       row.find('.link').click(async function () {
         const movieId = movie['Movie ID'];
-      
+
         try {
           const review = await fetchData(`/api/review/${movieId}`);
           console.log(review)
@@ -103,7 +103,7 @@ $(document).ready(function () {
             $("#review-title").text(review[0].Title);
             $("#review-text").text(review[0].Text);
             $("#review-date").text(review[0].Date);
-      
+
             $("#reviewModal").addClass("is-active");
           } else {
             console.error('Review data is empty or not available.');
@@ -249,9 +249,9 @@ $(document).ready(function () {
         const errorResponse = await response.json();
         alertMessage = 'Ошибка при добавлении рецензии: ' + JSON.stringify(errorResponse);
       }
-  
+
       alert(alertMessage);
-  
+
     } catch (error) {
       alert('Ошибка: ' + error);
     }
@@ -303,21 +303,39 @@ $(document).ready(function () {
         console.error(errorResponse);
         alertMessage = 'Ошибка при добавлении фильма: ' + JSON.stringify(errorResponse);
       }
-  
+
       alert(alertMessage);
-  
+
     } catch (error) {
       alert('Ошибка: ' + error);
     }
   });
 
-  $("#query").click(async function () {
-    const query = $("#search").val();
-    const response = await fetchData(`/api/movies/search/${query}`);
+  $("#query").on('click', function () {
+    $("#search").focus();
+  });
+
+  $("#search").on('focus', function () {
     const result = $('#searchResults');
     result.css("display", "block");
+  });
+
+  $("#search").on('blur', function () {
+    resultTimeout = setTimeout(function () {
+      const result = $('#searchResults');
+      result.css("display", "none");
+    }, 200);
+  });
+
+  $("#search").on('input', async function () {
+    const query = $(this).val();
+    const response = await fetchData(`/api/movies/search/${query}`);
+    const result = $('#searchResults');
+    result.empty();
     response.forEach((data) => {
-      const newDiv = $('<p>').text(data.Title);
+      const newDiv = $('<p>');
+      const newLink = $('<a>').attr('href', `#${data["Movie ID"]}`).text(data.Title);
+      newDiv.append(newLink);
       result.append(newDiv);
     });
   });
