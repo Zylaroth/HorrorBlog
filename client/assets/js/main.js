@@ -7,7 +7,7 @@ $(document).ready(function () {
 
   // Модальное окно
   $(".modal-active").click(function () {
-    $(".modal").toggleClass("is-active");
+    $(".modal-movie").toggleClass("is-active");
   });
 
   $(".modal-delete, .modal-cancel, .modal-close").click(function () {
@@ -239,19 +239,21 @@ $(document).ready(function () {
         }),
       });
 
+      let alertMessage;
+
       if (response.ok) {
-        console.log('Рецензия успешно добавлена');
         const updatedMoviesData = await fetchData('/api/movies');
         populateMovieSelect(updatedMoviesData);
-        alert('Рецензия успешно добавлена')
+        alertMessage = 'Рецензия успешно добавлена';
       } else {
-        const errorMessage = await response.text();
-        console.error('Ошибка при добавлении рецензии:', errorMessage);
-        alert('Ошибка при добавлении рецензии:', errorMessage)
+        const errorResponse = await response.json();
+        alertMessage = 'Ошибка при добавлении рецензии: ' + JSON.stringify(errorResponse);
       }
+  
+      alert(alertMessage);
+  
     } catch (error) {
-      console.error('Ошибка:', error);
-      alert('Ошибка:', error)
+      alert('Ошибка: ' + error);
     }
   });
 
@@ -265,10 +267,10 @@ $(document).ready(function () {
     const url = $("#url").val();
     $(".modal").removeClass("is-active");
 
-    function isValidImageUrl(url) {
-      var imageRegex = /\.(jpeg|jpg|gif|png|bmp)$/;
-      return imageRegex.test(url);
-    }
+    // function isValidImageUrl(url) {
+    //   var imageRegex = /\.(jpeg|jpg|gif|png|bmp)$/;
+    //   return imageRegex.test(url);
+    // }
 
     try {
       const response = await fetch('http://localhost:3000/api/create/movie', {
@@ -286,29 +288,54 @@ $(document).ready(function () {
             const trimmedGenre = genre.trim();
             return trimmedGenre.charAt(0).toUpperCase() + trimmedGenre.slice(1).toLowerCase();
           }),
-          url: isValidImageUrl(url) ? url : null,
+          url: url
         }),
       });
 
+      let alertMessage;
+
       if (response.ok) {
-        console.log('Фильм успешно добавлен');
         const updatedMoviesData = await fetchData('/api/movies');
         populateMovieSelect(updatedMoviesData);
-        alert('Фильм успешно добавлен')
+        alertMessage = 'Фильм успешно добавлен';
       } else {
-        const errorMessage = await response.text();
-        console.error('Ошибка при добавлении фильма:', errorMessage);
-        alert('Ошибка при добавлении фильма:', errorMessage)
+        const errorResponse = await response.json();
+        console.error(errorResponse);
+        alertMessage = 'Ошибка при добавлении фильма: ' + JSON.stringify(errorResponse);
       }
+  
+      alert(alertMessage);
+  
     } catch (error) {
-      console.error('Ошибка:', error);
-      alert('Ошибка:', error)
+      alert('Ошибка: ' + error);
     }
+  });
+
+  $("#query").click(async function () {
+    const query = $("#search").val();
+    const response = await fetchData(`/api/movies/search/${query}`);
+    const result = $('#searchResults');
+    result.css("display", "block");
+    response.forEach((data) => {
+      const newDiv = $('<p>').text(data.Title);
+      result.append(newDiv);
+    });
   });
 
   $("#modalTypeSelect").change(async function () {
     const isMovie = $("#modalTypeSelect").val() === 'movie';
     $("#movieFieldsContainer").css('display', isMovie ? 'block' : 'none');
     $("#reviewFieldsContainer").css('display', isMovie ? 'none' : 'block');
+  });
+
+  const width1 = $(".search-element-1").width();
+  const width2 = $(".search-element-2").width();
+  const totalWidth = width1 + width2;
+
+  const translateYValue = $(".search").height();
+
+  $('#searchResults').css({
+    'width': totalWidth + 'px',
+    'transform': 'translateY(' + translateYValue + 'px)'
   });
 });

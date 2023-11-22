@@ -290,3 +290,15 @@ td {
 #titleCell:hover {
     background-color: rgba(0, 1, 0, 0.05);
 }
+
+#searchResults {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    display: none;
+}
+
+#query {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}

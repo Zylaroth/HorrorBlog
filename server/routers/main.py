@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette.status import HTTP_200_OK
+from sqlalchemy import or_
 
 from models import FindMovie, FindReview, Review, Movie, FindGenre, Image
 from dtos import ReviewCreate, MovieCreate
@@ -78,45 +79,76 @@ async def get_reviews(db: db_dependency):
 
 @main.post("/create/review", status_code=HTTP_200_OK)
 async def create_review(data: ReviewCreate, db: db_dependency):
-    try:
-        current_date = datetime.now()
-        review = Review(movie_id=data.movie_id, text=data.text, date=current_date)
-        db.add(review)
-        db.commit()
-        db.refresh(review)
-        return review
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+    errors = []
+
+    if not data.movie_id:
+        errors.append("Movie ID is required")
+    if not data.text:
+        errors.append("Text is required")
+
+    if errors:
+        raise HTTPException(status_code=422, detail=errors)
+
+    current_date = datetime.now()
+    review = Review(movie_id=data.movie_id, text=data.text, date=current_date)
+
+    db.add(review)
+    db.commit()
+    db.refresh(review)
+
+    return review
     
 @main.post("/create/movie", status_code=HTTP_200_OK)
 async def create_movie(data: MovieCreate, db: db_dependency):
-    try:
-        release_date = datetime.strptime(data.release_date, "%Y-%m-%d").date()
+    errors = []
 
-        movie = Movie(
-            title=data.title,
-            director=data.director,
-            actors=data.actors,
-            release_date=release_date,
-            rating=data.rating
-        )
+    if not data.title:
+        errors.append("Title is required")
+    if not data.director:
+        errors.append("Director is required")
+    if not data.actors:
+        errors.append("Actors is required")
+    if not data.release_date:
+        errors.append("Release date is required")
+    if not data.rating:
+        errors.append("Rating is required")
+    if not data.genres:
+        errors.append("At least one genre is required")
 
-        for genre_name in data.genres:
-            genre = FindGenre.get_genre_by_name(genre_name, db)
-            if genre:
-                movie.genres.append(genre)
+    if errors:
+        raise HTTPException(status_code=422, detail=errors)
 
-        image = Image(url=data.url)
-        movie.images.append(image)
+    release_date = datetime.strptime(data.release_date, "%Y-%m-%d").date()
 
-        db.add(movie)
-        db.commit()
-        db.refresh(movie)
+    movie = Movie(
+        title=data.title,
+        director=data.director,
+        actors=data.actors,
+        release_date=release_date,
+        rating=data.rating
+    )
 
-        return movie
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+    for genre_name in data.genres:
+        genre = FindGenre.get_genre_by_name(genre_name, db)
+        if not genre:
+            errors.append(f"Genre '{genre_name}' not found")
+
+        movie.genres.append(genre)
+
+    if not data.url or not data.url:
+        errors.append("Invalid or missing image URL")
+
+    if errors:
+        raise HTTPException(status_code=422, detail=errors)
+
+    image = Image(url=data.url)
+    movie.images.append(image)
+
+    db.add(movie)
+    db.commit()
+    db.refresh(movie)
+
+    return movie
     
 @main.get("/review/{id}", status_code=HTTP_200_OK)
 async def get_review_by_id(id: int, db: db_dependency):
@@ -137,3 +169,19 @@ async def get_review_by_id(id: int, db: db_dependency):
             "Text": "Не найдено.",
             "Image URL": "Не найдено.",
         }]}
+    
+@main.get("/movies/search/{query}")
+def search_movies(query: str, db: db_dependency):
+    keywords = query.split()
+    movies = db.query(Movie).filter(or_(*[Movie.title.ilike(f"%{keyword}%") for keyword in keywords])).all()
+
+    movie_list = []
+
+    for movie in movies:
+        movie_dict = {
+            "Movie ID": movie.id,
+            "Title": movie.title,
+        }
+        movie_list.append(movie_dict)
+    
+    return {"message": movie_list}

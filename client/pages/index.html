@@ -42,7 +42,7 @@
       <button class="modal-close is-large" aria-label="close" id="reviewModalCloseButton"></button>
     </div>
   </div>
-  <div class="modal">
+  <div class="modal modal-movie">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
@@ -160,24 +160,25 @@
       <div class="level-right">
         <div class="navbar-menu">
           <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" href="#movies">Фильмы</a></p>
-          <p class="level-item has-text-weight-bold"><a href="#review" class="lh button is-primary is-light">Рецензия</a></p>
+          <p class="level-item has-text-weight-bold"><a href="#review" class="lh button is-primary is-light">С / Р</a></p>
           <p class="level-item"><a class="modal-active button is-success">Добавить</a></p>
         </div>
       </div>
       <div class="level-right">
-        <div class="field has-addons">
-          <p class="control">
-            <input class="input" type="text" placeholder="Поиск рецензии">
+        <div class="field has-addons is-relative search">
+          <p class="control search-element-1">
+            <input id="search" class="input" type="text" placeholder="Поиск рецензии">
           </p>
-          <p class="control">
-            <button class="button is-success">Поиск</button>
+          <p class="control search-element-2">
+            <button id="query" class="button is-success">Поиск</button>
           </p>
+          <div id="searchResults" class="box"></div>
         </div>
       </div>
     </nav>
     <div class="navbar-active">
       <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" href="#movies">Фильмы</a></p>
-      <p class="level-item has-text-weight-bold"><a href="#review" class="button is-primary is-light">Рецензия</a></p>
+      <p class="level-item has-text-weight-bold"><a href="#review" class="button is-primary is-light">С / Р</a></p>
       <p class="level-item"><a class="button is-success">Добавить</a></p>
     </div>
   </header>
