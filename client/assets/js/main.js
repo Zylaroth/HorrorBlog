@@ -267,11 +267,6 @@ $(document).ready(function () {
     const url = $("#url").val();
     $(".modal").removeClass("is-active");
 
-    // function isValidImageUrl(url) {
-    //   var imageRegex = /\.(jpeg|jpg|gif|png|bmp)$/;
-    //   return imageRegex.test(url);
-    // }
-
     try {
       const response = await fetch('http://localhost:3000/api/create/movie', {
         method: 'POST',
@@ -346,14 +341,40 @@ $(document).ready(function () {
     $("#reviewFieldsContainer").css('display', isMovie ? 'none' : 'block');
   });
 
-  const width1 = $(".search-element-1").width();
-  const width2 = $(".search-element-2").width();
-  const totalWidth = width1 + width2;
-
-  const translateYValue = $(".search").height();
-
   $('#searchResults').css({
-    'width': totalWidth + 'px',
-    'transform': 'translateY(' + translateYValue + 'px)'
+    'width': $(".search-element-1").width() + $(".search-element-2").width() + 'px',
+    'transform': 'translateY(' + $(".search").height() + 'px)'
+  });
+
+  setInterval(function () {
+    var urlHash = window.location.hash.substr(1);
+  
+    if (urlHash) {
+      $('.highlighted').removeClass('highlighted');
+  
+      var elementToHighlight = $('#' + urlHash);
+      if (elementToHighlight.length > 0) {
+        elementToHighlight.addClass('highlighted');
+        var parentElement = elementToHighlight.parent();
+        if (parentElement.length > 0) {
+          parentElement.addClass('highlighted');
+        }
+      }
+    }
+  }, 1000);
+
+  $('a[href^="#"]').on('click', function (e) {
+    e.preventDefault();
+
+    var targetId = $(this).attr('href');
+    var $targetElement = $(targetId);
+
+    if ($targetElement.length) {
+      var scrollTo = $targetElement.offset().top - ($(window).height() - $targetElement.outerHeight()) / 2;
+
+      $('html, body').animate({
+        scrollTop: scrollTo
+      }, 1000);
+    }
   });
 });
