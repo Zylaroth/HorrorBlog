@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from starlette.status import HTTP_200_OK
 from sqlalchemy import or_
 
-from models import FindMovie, FindReview, Review, Movie, FindGenre, Image
+from models import FindMovie, FindReview, Review, Movie, FindGenre, Image, Genre
 from dtos import ReviewCreate, MovieCreate
 from database import db_dependency
 
@@ -10,11 +10,13 @@ from datetime import datetime
 
 main = APIRouter(prefix='/api')
 
+text = "Здесь мы глубоко анализируем каждое произведение, раскрывая его художественные и кинематографические аспекты. В ужасах мы находим не только источник мистического и тревожного, но и уникальные формы искусства, способные затронуть самые глубокие человеческие страхи. Наши рецензии - это не просто оценки, а погружение в мир сюжетов, тем и символики, который раскрывает грани человеческой психики. Мы приглашаем вас исследовать с нами кинематографическое наследие ужасов, где каждый фильм – это повод задуматься о природе страха и его влиянии на наше восприятие мира. Нажмите 'Добавить', чтобы поделиться своим мнением или отправиться в увлекательное путешествие в мир кинематографического ужаса. Ужасайтесь с нами и открывайте новые грани киноискусства!"
+
 @main.get("/index", status_code=HTTP_200_OK)
 def get_data(db: db_dependency):
     movies = FindMovie.get_movies_ordered_by_release_date(db)
     movie_list = [{"id": i.id, "image_url": i.images[0].url} for i in movies if bool(i.images) and bool(i.images[0].url)]
-    return {"message": ["Тут публикуются рецензии на фильмы.", movie_list]}
+    return {"message": [text, movie_list]}
 
 
 @main.get("/movies", status_code=HTTP_200_OK)
@@ -171,7 +173,7 @@ async def get_review_by_id(id: int, db: db_dependency):
         }]}
     
 @main.get("/movies/search/{query}")
-def search_movies(query: str, db: db_dependency):
+async def search_movies(query: str, db: db_dependency):
     keywords = query.split()
     movies = db.query(Movie).filter(or_(*[Movie.title.ilike(f"%{keyword}%") for keyword in keywords])).all()
 
@@ -184,4 +186,36 @@ def search_movies(query: str, db: db_dependency):
         }
         movie_list.append(movie_dict)
     
+    return {"message": movie_list}
+
+@main.get("/genres")
+async def genres(db: db_dependency):
+    genres = db.query(Genre).all()
+    return {"message": genres}
+
+@main.get("/movies/search_by_genre/{id}")
+async def search_movies_by_genre(id: int, db: db_dependency):
+    genre_obj = FindGenre.get_genre_by_id(id, db)
+
+    if not genre_obj:
+        raise HTTPException(status_code=404, detail="Genre not found")
+
+    movies = db.query(Movie).filter(Movie.genres.contains(genre_obj)).all()
+
+    movie_list = []
+
+    for movie in movies:
+        movie_dict = {
+            "Movie ID": movie.id,
+            "Title": movie.title,
+            "Director": movie.director,
+            "Actors": movie.actors,
+            "Release Date": str(movie.release_date),
+            "Rating": movie.rating,
+            "Image URL": movie.images[0].url if movie.images else "",
+            "Genre": [i.name for i in movie.genres],
+            "is_reviewed": bool(movie.reviews),
+        }
+        movie_list.append(movie_dict)
+
     return {"message": movie_list}

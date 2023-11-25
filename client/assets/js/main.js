@@ -56,7 +56,7 @@ $(document).ready(function () {
       $(`#${targetElementId}`).text(slice);
 
       if (charCount <= text.length) {
-        setTimeout(typeText, 50);
+        setTimeout(typeText, 10);
       }
     }
 
@@ -82,8 +82,8 @@ $(document).ready(function () {
     moviesData.forEach((movie) => {
       const row = $('<tr>');
       row.html(`
-        <td id="${movie['Movie ID']}">${movie['Movie ID']}</td>
-        <td><figure class="image is-3by4"><img src="${movie['Image URL']}" alt="${movie.title}"></figure></td>
+        <td id="${movie['Movie ID']}" class="link">${movie['Movie ID']}</td>
+        <td><figure class="image is-3by4 link"><img src="${movie['Image URL']}" alt="${movie.title}"></figure></td>
         <td id="titleCell" class="has-text-weight-bold link"><span>${movie.Title}</span></td>
         <td id="titleCell"><span>${movie.Director}</span></td>
         <td id="titleCell"><span>${movie['Release Date']}</span></td>
@@ -116,6 +116,24 @@ $(document).ready(function () {
       tableBody.append(row);
 
     });
+
+    $("#href-movie").on("click", function (e) {
+      e.preventDefault();
+      $(".hidder-b").show();
+      $(".hidder-a").hide();
+    })
+
+    $("#href-review").on("click", function (e) {
+      e.preventDefault();
+      $(".hidder-a").show();
+      $(".hidder-b").hide();
+    })
+
+    $("#href-main").on("click", function (e) {
+      e.preventDefault();
+      $(".hidder-a, .hidder-b").show();
+    })
+
     $('[id="titleCell"]').each(function () {
       const $this = $(this);
       const originalText = $this.text();
@@ -143,8 +161,11 @@ $(document).ready(function () {
 
   const populateTableReview = (review) => {
     const reviewBody = document.querySelector('#review');
+    reviewBody.innerHTML = `<h1 class='title mt-5'>
+    <strong class="has-text-white">Случайная рецензия</strong>
+    </h1>`;
     const newDiv = document.createElement('div');
-    newDiv.classList.add('tile', 'is-ancestor');
+    newDiv.classList.add('tile', 'is-ancestor', 'review-container');
 
     newDiv.innerHTML = `
     <div class="tile is-4 is-vertical is-parent">
@@ -154,7 +175,7 @@ $(document).ready(function () {
       </figure>
     </div>
     <div class="tile is-child box has-background-white-ter"><p class="subtitle"><strong>Время публикации: </strong>${review.Date}</p></div>
-    <div class="tile is-child has-background-transparent"></div>
+    <div class="tile is-child has-background-transparent has-text-centered"><a class="regenerate-button">Перегенерировать</a></div>
     <div class="tile is-child has-background-transparent"></div>
     <div class="tile is-child has-background-transparent"></div>
     <div class="tile is-child has-background-transparent"></div>
@@ -170,7 +191,22 @@ $(document).ready(function () {
     </div>
     `;
     reviewBody.appendChild(newDiv);
-  }
+
+    const regenerateButton = newDiv.querySelector('.regenerate-button');
+    regenerateButton.addEventListener('click', async () => {
+      await handleRegenerateReview();
+    });
+  };
+
+  const handleRegenerateReview = async () => {
+    try {
+      const reviewData = await fetchData('/api/review');
+      populateTableReview(reviewData[0]);
+    } catch (error) {
+      console.error('Ошибка:', error);
+    }
+  };
+
 
   const populateMovieSelect = (moviesData) => {
     const movieSelect = document.getElementById('movieSelect');
@@ -193,6 +229,26 @@ $(document).ready(function () {
     }
   };
 
+  const populateGenresDropdown = (genres) => {
+    const genresDropdown = document.getElementById('genresDropdown');
+    console.log(genres)
+    genresDropdown.innerHTML = '';
+
+    genres.forEach((genre) => {
+      const genreItem = document.createElement('a');
+      genreItem.className = 'navbar-item';
+      genreItem.textContent = genre.name;
+
+      genreItem.addEventListener('click', async () => {
+        const textData = await fetchData(`/api/movies/search_by_genre/${genre.id}`);
+        $('.movie').html("")
+        populateTableMovie(textData);
+      });
+
+      genresDropdown.appendChild(genreItem);
+    });
+  };
+
   const handleDataFetch = async () => {
     try {
       const textData = await fetchData('/api/index');
@@ -210,9 +266,11 @@ $(document).ready(function () {
 
       const moviesData = await fetchData('/api/movies');
       const reviewData = await fetchData('/api/review');
+      const genres = await fetchData('/api/genres');
       populateTableMovie(moviesData);
       populateTableReview(reviewData[0]);
       populateMovieSelect(moviesData);
+      populateGenresDropdown(genres);
 
     } catch (error) {
       console.error('Ошибка при получении данных:', error);
@@ -348,10 +406,10 @@ $(document).ready(function () {
 
   setInterval(function () {
     var urlHash = window.location.hash.substr(1);
-  
+
     if (urlHash) {
       $('.highlighted').removeClass('highlighted');
-  
+
       var elementToHighlight = $('#' + urlHash);
       if (elementToHighlight.length > 0) {
         elementToHighlight.addClass('highlighted');
@@ -362,19 +420,4 @@ $(document).ready(function () {
       }
     }
   }, 1000);
-
-  $('a[href^="#"]').on('click', function (e) {
-    e.preventDefault();
-
-    var targetId = $(this).attr('href');
-    var $targetElement = $(targetId);
-
-    if ($targetElement.length) {
-      var scrollTo = $targetElement.offset().top - ($(window).height() - $targetElement.outerHeight()) / 2;
-
-      $('html, body').animate({
-        scrollTop: scrollTo
-      }, 1000);
-    }
-  });
 });

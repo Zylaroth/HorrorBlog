@@ -153,21 +153,25 @@
       <div class="level-left">
         <div class="level-item">
           <h1 class="title is-3">
-            <a href=""><strong class="nosifer has-text-primary-light">Horror Blog</strong></a>
+            <a href="index.html"><strong class="nosifer has-text-primary-light">Horror Blog</strong></a>
           </h1>
         </div>
       </div>
       <div class="level-right">
         <div class="navbar-menu">
-          <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" href="#movies">Фильмы</a></p>
-          <p class="level-item has-text-weight-bold"><a href="#review" class="lh button is-primary is-light">С / Р</a></p>
-          <p class="level-item"><a class="modal-active button is-success">Добавить</a></p>
+          <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" id="href-main">Главная</a></p>
+          <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" id="href-movie"
+              href="#movies">Фильмы</a></p>
+          <p class="level-item has-text-weight-bold"><a href="#review" id="href-review"
+              class="lh button is-primary is-light">С / Р</a>
+          </p>
+          <p class="level-item"><a class="modal-active button is-success">➕</a></p>
         </div>
       </div>
       <div class="level-right">
         <div class="field has-addons is-relative search">
           <p class="control search-element-1">
-            <input id="search" class="input" type="text" placeholder="Поиск рецензии">
+            <input id="search" class="input" type="text" placeholder="Поиск фильма">
           </p>
           <p class="control search-element-2">
             <button id="query" class="button is-success">Поиск</button>
@@ -177,66 +181,88 @@
       </div>
     </nav>
     <div class="navbar-active">
-      <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" href="#movies">Фильмы</a></p>
-      <p class="level-item has-text-weight-bold"><a href="#review" class="button is-primary is-light">С / Р</a></p>
+      <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" id="href-movie"
+          href="#movies">Фильмы</a></p>
+      <p class="level-item has-text-weight-bold"><a href="#review" id="href-review"
+          class="lh button is-primary is-light">С / Р</a>
+      </p>
       <p class="level-item"><a class="button is-success">Добавить</a></p>
     </div>
   </header>
   <main>
-    <section class="text-normal container">
-      <div class="columns">
-        <div class="column">
-          <div class="box is-relative has-background-transparent p-0">
-            <h1 class="title mb-0">
-              <strong class="has-text-primary-light">Новинки</strong>
-            </h1>
-            <img id="prev-image">
-            <div id="carousel-container">
-              <div id="carousel"></div>
-              <div id="prev">&#10094;</div>
-              <div id="next">&#10095;</div>
+    <div class="hidder-b hidder-a">
+      <section class="text-normal container">
+        <div class="columns">
+          <div class="column">
+            <div class="box is-relative has-background-transparent p-0 pt-6">
+              <h1 class="title mb-0">
+                <strong class="has-text-white">Новинки</strong>
+              </h1>
+              <img id="prev-image">
+              <div id="carousel-container">
+                <div id="carousel"></div>
+                <div id="prev">&#10094;</div>
+                <div id="next">&#10095;</div>
+              </div>
+              <img id="next-image" class="side-image">
             </div>
-            <img id="next-image" class="side-image">
           </div>
-        </div>
-        <div class="column">
-          <div class="box has-background-white-ter">
-            <h3 class="has-text-weight-bold">Добро пожаловать!</h3>
-            <p id="typedText"></p>
+          <div class="column">
+            <div class="box has-background-transparent has-text-white">
+              <h3 class="has-text-weight-bold">Добро пожаловать!</h3>
+              <p id="typedText"></p>
+            </div>
           </div>
-        </div>
-    </section>
-    <section class="container" id="review">
-      <h1 class="title mb-1">
-        <strong class="has-text-primary-light">Случайная рецензия</strong>
-      </h1>
-    </section>
+      </section>
+    </div>
+    <div class="hidder-a">
+      <section class="container" id="review"></section>
+    </div>
     <section class="container" id="movies">
-      <h1 class="title mb-1">
-        <strong class="has-text-primary-light">Фильмы</strong>
-      </h1>
-      <div class="table-container">
-        <table class="table has-background-white-ter is-hoverable is-fullwidth">
-          <thead>
-            <tr>
-              <th>№</th>
-              <th><abbr title="image">Постер</abbr></th>
-              <th><abbr title="title">Название</abbr></th>
-              <th><abbr title="director">Режиссёр</abbr></th>
-              <th><abbr title="release_date">Дата</abbr></th>
-              <th><abbr title="rating">Рейтинг</abbr></th>
-              <th><abbr title="genre">Жанры</abbr></th>
-              <th><abbr title="actors">Актёры</abbr></th>
-            </tr>
-          </thead>
-          <tbody class="movie">
-          </tbody>
-        </table>
+      <div class="hidder-b">
+        <nav class="navbar has-background-transparent" role="navigation" aria-label="main navigation">
+            <h1 class="title mb-0">
+              <strong class="has-text-white">Фильмы</strong>
+            </h1>
+          <div class="navbar-end">
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link">
+                <button class="button is-success">Жанры</button>
+              </a>
+              <div id="genresDropdown" class="navbar-dropdown">
+                <a class="navbar-item">Элемент 1</a>
+                <a class="navbar-item">Элемент 2</a>
+                <a class="navbar-item">Элемент 3</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+        <div class="table-container">
+          <table class="table has-background-white-ter is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>№</th>
+                <th><abbr title="image">Постер</abbr></th>
+                <th><abbr title="title">Название</abbr></th>
+                <th><abbr title="director">Режиссёр</abbr></th>
+                <th><abbr title="release_date">Дата</abbr></th>
+                <th><abbr title="rating">Рейтинг</abbr></th>
+                <th><abbr title="genre">Жанры</abbr></th>
+                <th><abbr title="actors">Актёры</abbr></th>
+              </tr>
+            </thead>
+            <tbody class="movie">
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   </main>
   <footer>
     <section class="additional-features">
+      <!-- <h3 class="title mb-0 pb-5">
+        <strong class="has-text-white">Спонсоры проекта: </strong>
+      </h3> -->
       <div class="slider">
         <div class="slide-track">
           <div class="slide">
@@ -290,7 +316,12 @@
         </div>
       </div>
     </section>
-    <p>Знакомся с миром фильмов по отзывам!</p>
+    <section class="contacts">
+      <h2>Связаться с нами</h2>
+      <p>Почта: contact@horrorblog.com</p>
+      <p>Телефон: +7 193 857 6899</p>
+    </section>
+    <p class="footer">Знакомься с миром фильмов по отзывам!</p>
   </footer>
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="

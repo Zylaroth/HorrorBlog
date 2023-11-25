@@ -3,7 +3,7 @@ body {
     color: #FFF !important;
     background-image: url(../images/background.jpg);
     background-size: contain;
-    background-repeat: repeat;
+    background-repeat:unset;
     position: relative;
     min-height: 100vh;
 }
@@ -18,7 +18,7 @@ section {
 }
 
 section:last-child {
-    padding-bottom: 150px;
+    padding-bottom: 450px;
 }
 
 .text-normal {
@@ -27,7 +27,15 @@ section:last-child {
 
 .modal-content {
     overflow-x: hidden !important;
+    width: 70% !important;
+}
 
+@media screen and (max-width: 769px) {
+    .modal-content {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-height: 100vh !important;
+    }
 }
 
 .modal-content::-webkit-scrollbar {
@@ -91,6 +99,10 @@ footer {
 
 .level {
     margin-bottom: 0 !important;
+}
+
+#typedText {
+  min-height: 500px;
 }
 
 .nosifer {
@@ -202,7 +214,7 @@ footer {
 #next-image {
     width: 30%;
     opacity: 0.8;
-    transform: translateY(-35%);
+    transform: translateY(-30%);
 }
 
 #prev:hover,
@@ -239,6 +251,11 @@ footer {
 
 .table {
     border-radius: 6px;
+    
+}
+
+.table-container {
+    min-height: 500px;
 }
 
 .table th,
@@ -304,5 +321,39 @@ td {
 }
 
 .highlighted {
-    background-color: rgb(0,0,0,.1) !important;
+    background-color: rgb(0, 0, 0, .1) !important;
+}
+
+.contacts {
+    background-color: rgb(51, 51, 51, .4) !important;
+    color: #FFF;
+    padding: 20px;
+    text-align: center;
+}
+
+.contacts h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.contacts {
+    background-color: #333;
+    color: #FFF;
+    padding: 20px;
+    text-align: center;
+}
+
+.contacts h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.footer {
+    background-color: #0f0f0f !important;
+    padding: 20px 0 20px 0 !important;
+}
+
+.navbar-end {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px;
 }
