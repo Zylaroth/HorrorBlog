@@ -3,7 +3,7 @@ body {
     color: #FFF !important;
     background-image: url(../images/background.jpg);
     background-size: contain;
-    background-repeat:unset;
+    background-repeat: unset;
     position: relative;
     min-height: 100vh;
 }
@@ -102,7 +102,7 @@ footer {
 }
 
 #typedText {
-  min-height: 500px;
+    min-height: 500px;
 }
 
 .nosifer {
@@ -122,7 +122,6 @@ footer {
         display: block;
     }
 }
-
 
 @keyframes scroll {
     0% {
@@ -232,15 +231,6 @@ footer {
     right: 0;
 }
 
-/* .carousel-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-} */
-
 .has-background-transparent {
     background-color: transparent !important;
 }
@@ -251,7 +241,7 @@ footer {
 
 .table {
     border-radius: 6px;
-    
+
 }
 
 .table-container {
@@ -356,4 +346,13 @@ td {
 .navbar-end {
     background-color: rgba(255, 255, 255, 0.1) !important;
     border-radius: 10px;
+}
+
+.navbar-item,
+.navbar-link {
+    padding: 0.5rem !important;
+}
+
+.navbar-link:not(.is-arrowless) {
+    padding-right: 2.5em !important;
 }

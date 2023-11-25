@@ -159,19 +159,19 @@
       </div>
       <div class="level-right">
         <div class="navbar-menu">
-          <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" id="href-main">Главная</a></p>
-          <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" id="href-movie"
-              href="#movies">Фильмы</a></p>
-          <p class="level-item has-text-weight-bold"><a href="#review" id="href-review"
-              class="lh button is-primary is-light">С / Р</a>
+          <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" id="href-main">Главная</a>
           </p>
-          <p class="level-item"><a class="modal-active button is-success">➕</a></p>
+          <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" id="href-movie">Фильмы</a>
+          </p>
+          <p class="level-item has-text-weight-bold"><a id="href-review" class="lh button is-primary is-light">СР</a>
+          </p>
+          <p class="level-item has-text-weight-bold"><a class="modal-active button is-success">ДОБ</a></p>
         </div>
       </div>
       <div class="level-right">
         <div class="field has-addons is-relative search">
           <p class="control search-element-1">
-            <input id="search" class="input" type="text" placeholder="Поиск фильма">
+            <input id="search" class="input" type="text" placeholder="Поиск по странице">
           </p>
           <p class="control search-element-2">
             <button id="query" class="button is-success">Поиск</button>
@@ -181,12 +181,10 @@
       </div>
     </nav>
     <div class="navbar-active">
-      <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" id="href-movie"
-          href="#movies">Фильмы</a></p>
-      <p class="level-item has-text-weight-bold"><a href="#review" id="href-review"
-          class="lh button is-primary is-light">С / Р</a>
+      <p class="level-item has-text-weight-bold"><a class="button is-primary is-light" id="href-movie">Фильмы</a></p>
+      <p class="level-item has-text-weight-bold"><a id="href-review" class="lh button is-primary is-light">СР</a>
       </p>
-      <p class="level-item"><a class="button is-success">Добавить</a></p>
+      <p class="level-item"><a class="button is-success">Доб</a></p>
     </div>
   </header>
   <main>
@@ -221,18 +219,32 @@
     <section class="container" id="movies">
       <div class="hidder-b">
         <nav class="navbar has-background-transparent" role="navigation" aria-label="main navigation">
-            <h1 class="title mb-0">
-              <strong class="has-text-white">Фильмы</strong>
-            </h1>
+          <h1 class="title mb-0">
+            <strong class="has-text-white">Фильмы</strong>
+          </h1>
           <div class="navbar-end">
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link">
-                <button class="button is-success">Жанры</button>
-              </a>
-              <div id="genresDropdown" class="navbar-dropdown">
-                <a class="navbar-item">Элемент 1</a>
-                <a class="navbar-item">Элемент 2</a>
-                <a class="navbar-item">Элемент 3</a>
+            <div class="navbar-item">
+              <div class="field is-grouped">
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link">
+                    <button class="button is-success">Жанры</button>
+                  </a>
+                  <div id="genresDropdown" class="navbar-dropdown">
+                    <a class="navbar-item">Элемент 1</a>
+                    <a class="navbar-item">Элемент 2</a>
+                    <a class="navbar-item">Элемент 3</a>
+                  </div>
+                </div>
+                <div class="navbar-item">
+                  <p class="control" id="populateButton">
+                    <button class="button is-success">Показать все</button>
+                  </p>
+                </div>
+                <div class="navbar-item">
+                  <div class="is-overlay loadingIndicator is-hidden">
+                    <div class="loader"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -260,9 +272,6 @@
   </main>
   <footer>
     <section class="additional-features">
-      <!-- <h3 class="title mb-0 pb-5">
-        <strong class="has-text-white">Спонсоры проекта: </strong>
-      </h3> -->
       <div class="slider">
         <div class="slide-track">
           <div class="slide">

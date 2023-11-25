@@ -78,9 +78,18 @@ $(document).ready(function () {
 
   const populateTableMovie = (moviesData) => {
     const tableBody = $('.movie');
+    const row = $('<tr>');
 
+    if (moviesData.length === 0) {
+      row.html(`
+        <td></td>
+        <td></td>
+        <td id="titleCell" class="has-text-weight-bold link"><span>Ничего не найдено</span></td>
+      `);
+      tableBody.append(row);
+    }
+    else {
     moviesData.forEach((movie) => {
-      const row = $('<tr>');
       row.html(`
         <td id="${movie['Movie ID']}" class="link">${movie['Movie ID']}</td>
         <td><figure class="image is-3by4 link"><img src="${movie['Image URL']}" alt="${movie.title}"></figure></td>
@@ -97,7 +106,6 @@ $(document).ready(function () {
 
         try {
           const review = await fetchData(`/api/review/${movieId}`);
-          console.log(review)
           if (review) {
             $("#review-image-url").attr("src", review[0]['Image URL']);
             $("#review-title").text(review[0].Title);
@@ -115,7 +123,7 @@ $(document).ready(function () {
 
       tableBody.append(row);
 
-    });
+    })};
 
     $("#href-movie").on("click", function (e) {
       e.preventDefault();
@@ -231,7 +239,6 @@ $(document).ready(function () {
 
   const populateGenresDropdown = (genres) => {
     const genresDropdown = document.getElementById('genresDropdown');
-    console.log(genres)
     genresDropdown.innerHTML = '';
 
     genres.forEach((genre) => {
@@ -240,9 +247,14 @@ $(document).ready(function () {
       genreItem.textContent = genre.name;
 
       genreItem.addEventListener('click', async () => {
-        const textData = await fetchData(`/api/movies/search_by_genre/${genre.id}`);
-        $('.movie').html("")
-        populateTableMovie(textData);
+        try {
+          $('.loadingIndicator').removeClass('is-hidden');
+          const textData = await fetchData(`/api/movies/search_by_genre/${genre.id}`);
+          $('.movie').html("")
+          populateTableMovie(textData);
+        } finally {
+          $('.loadingIndicator').addClass('is-hidden');
+        }
       });
 
       genresDropdown.appendChild(genreItem);
@@ -276,6 +288,21 @@ $(document).ready(function () {
       console.error('Ошибка при получении данных:', error);
     }
   };
+
+  $('#populateButton').click(async function () {
+    try {
+      $('.loadingIndicator').removeClass('is-hidden');
+      const moviesData = await fetchData('/api/movies');
+      $('.movie').html("")
+      populateTableMovie(moviesData);
+
+    } catch (error) {
+      console.error(error);
+
+    } finally {
+      $('.loadingIndicator').addClass('is-hidden');
+    }
+  });
 
   (async () => {
     await handleDataFetch();
