@@ -20,6 +20,9 @@ class FindGenre:
     @staticmethod
     def get_genre_by_id(id: Integer, db: Session):
         return  db.query(Genre).filter(Genre.id == id).first()
+    
+    def get_genre_by_name(name: str, db: Session):
+        return  db.query(Genre).filter(Genre.name == name).first()
 
 class Movie(Base):
     __tablename__ = "movies"
